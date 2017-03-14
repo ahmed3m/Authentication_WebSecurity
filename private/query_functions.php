@@ -516,6 +516,25 @@
     } elseif (!is_unique_username($user['username'], $user['id'])) {
       $errors[] = "Username not allowed. Try another.";
     }
+
+    if(is_blank($user['password'])) {
+      $errors[] = "Password cannot be blank.";
+    } elseif(!has_length($user['password'], ['min' => 12])) {
+      $errors[] = "Password must be at least 12 characters long.";
+    } elseif(!preg_match('/[A-Z]/', $user['password'])) {
+      $errors[] = "Password must contain at least 1 uppercase letter.";
+    } elseif(!preg_match('/[a-z]/', $user['password'])) {
+      $errors[] = "Password must contain at least 1 lowercase letter.";
+    } elseif(!preg_match('/[0-9]/', $user['password'])) {
+      $errors[] = "Password must contain at least 1 number.";
+    } elseif(!preg_match('/[^A-Za-z0-9\s]/', $user['password'])) {
+      $errors[] = "Password must contain at least 1 symbol.";
+    } elseif(is_blank($user['password_confirmation'])) {
+      $errors[] = "Password confirmation cannot be blank.";
+    } elseif($user['password'] != $user['password_confirmation']) {
+      $errors[] = "Password and password confirmation don't match.";
+    }
+
     return $errors;
   }
 
